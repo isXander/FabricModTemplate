@@ -132,11 +132,11 @@ publishing {
     }
 
     repositories {
-        if (hasProperty("isxander.username") && hasProperty("isxander.token")) {
+        if (hasProperty("xander-repo.username") && hasProperty("xander-repo.token")) {
             maven(url = "https://maven.isxander.dev/releases") {
                 credentials {
-                    username = property("isxander.username")?.toString()
-                    password = property("isxander.token")?.toString()
+                    username = property("xander-repo.username")?.toString()
+                    password = property("xander-repo.token")?.toString()
                 }
             }
         }
