@@ -5,7 +5,7 @@ plugins {
     id("io.github.juuxel.loom-quiltflower") version "1.7.+"
 
     id("com.modrinth.minotaur") version "2.+"
-    id("com.matthewprenger.cursegradle") version "1.+"
+    id("me.hypherionmc.cursegradle") version "2.+"
     id("com.github.breadmoirai.github-release") version "2.+"
     id("io.github.p03w.machete") version "1.+"
     `maven-publish`
@@ -87,8 +87,8 @@ val curseforgeId: String by project
 if (hasProperty("curseforge.token") && curseforgeId.isNotEmpty()) {
     curseforge {
         apiKey = findProperty("curseforge.token")
-        project(closureOf<com.matthewprenger.cursegradle.CurseProject> {
-            mainArtifact(tasks["remapJar"], closureOf<com.matthewprenger.cursegradle.CurseArtifact> {
+        project(closureOf<me.hypherionmc.cursegradle.CurseProject> {
+            mainArtifact(tasks["remapJar"], closureOf<me.hypherionmc.cursegradle.CurseArtifact> {
                 displayName = "${project.version}"
             })
 
@@ -102,7 +102,7 @@ if (hasProperty("curseforge.token") && curseforgeId.isNotEmpty()) {
             changelogType = "markdown"
         })
 
-        options(closureOf<com.matthewprenger.cursegradle.Options> {
+        options(closureOf<me.hypherionmc.cursegradle.Options> {
             forgeGradleIntegration = false
         })
     }
@@ -116,7 +116,7 @@ githubRelease {
     owner(split[0])
     repo(split[1])
     tagName("${project.version}")
-    targetCommitish("1.18")
+    targetCommitish("1.19")
     body(changelogText)
     releaseAssets(tasks["remapJar"].outputs.files)
 }
@@ -132,11 +132,11 @@ publishing {
     }
 
     repositories {
-        if (hasProperty("woverflow.username") && hasProperty("woverflow.token")) {
-            maven(url = "https://repo.woverflow.cc/releases") {
+        if (hasProperty("isxander.username") && hasProperty("isxander.token")) {
+            maven(url = "https://maven.isxander.dev/releases") {
                 credentials {
-                    username = property("woverflow.username")?.toString()
-                    password = property("woverflow.token")?.toString()
+                    username = property("isxander.username")?.toString()
+                    password = property("isxander.token")?.toString()
                 }
             }
         }
