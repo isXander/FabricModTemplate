@@ -4,7 +4,7 @@ plugins {
     id("fabric-loom") version "0.12.+"
     id("io.github.juuxel.loom-quiltflower") version "1.7.+"
 
-    id("com.modrinth.minotaur") version "2.+"
+    id("com.modrinth.minotaur") version "2.4.+"
     id("me.hypherionmc.cursegradle") version "2.+"
     id("com.github.breadmoirai.github-release") version "2.+"
     id("io.github.p03w.machete") version "1.+"
@@ -64,6 +64,10 @@ tasks {
         dependsOn("publish")
         dependsOn("githubRelease")
     }
+}
+
+java {
+    withSourcesJar()   
 }
 
 val changelogText = file("changelogs/${project.version}.md").takeIf { it.exists() }?.readText() ?: "No changelog provided"
@@ -132,13 +136,15 @@ publishing {
     }
 
     repositories {
-        if (hasProperty("xander-repo.username") && hasProperty("xander-repo.token")) {
+        if (hasProperty("xander-repo.username") && hasProperty("xander-repo.password")) {
             maven(url = "https://maven.isxander.dev/releases") {
                 credentials {
                     username = property("xander-repo.username")?.toString()
-                    password = property("xander-repo.token")?.toString()
+                    password = property("xander-repo.password")?.toString()
                 }
             }
+        } else {
+            println("Xander Maven credentials not satisfied.")   
         }
     }
 }
