@@ -19,10 +19,9 @@ repositories {
 }
 
 val minecraftVersion: String by project
+val fabricLoaderVersion: String by project
 
 dependencies {
-    val fabricLoaderVersion: String by project
-
     minecraft("com.mojang:minecraft:$minecraftVersion")
     mappings("net.fabricmc:yarn:$minecraftVersion+build.+:v2")
 
@@ -54,6 +53,14 @@ tasks {
             )
         }
     }
+    
+    remapJar {
+        archiveClassifier.set("fabric-$minecraftVersion")   
+    }
+    
+    remapSourcesJar {
+        archiveClassifier.set("fabric-$minecraftVersion-sources")   
+    }
 
     register("releaseMod") {
         group = "mod"
@@ -70,7 +77,7 @@ java {
     withSourcesJar()   
 }
 
-val changelogText = file("changelogs/${project.version}.md").takeIf { it.exists() }?.readText() ?: "No changelog provided"
+val changelogText = file("changelogs/${project.version}.md").takeIf { it.exists() }?.readText() ?: "No changelog provided."
 
 val modrinthId: String by project
 if (modrinthId.isNotEmpty()) {
