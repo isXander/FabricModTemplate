@@ -1,13 +1,13 @@
 plugins {
     java
 
-    id("fabric-loom") version "1.0.+"
-    id("io.github.juuxel.loom-quiltflower") version "1.7.+"
+    alias(libs.plugins.loom)
+    alias(libs.plugins.loom.quiltflower)
 
-    id("com.modrinth.minotaur") version "2.4.+"
-    id("me.hypherionmc.cursegradle") version "2.+"
-    id("com.github.breadmoirai.github-release") version "2.+"
-    id("io.github.p03w.machete") version "1.+"
+    alias(libs.plugins.minotaur)
+    alias(libs.plugins.cursegradle)
+    alias(libs.plugins.github.release)
+    alias(libs.plugins.machete)
     `maven-publish`
 }
 
@@ -18,14 +18,15 @@ repositories {
     mavenCentral()
 }
 
-val minecraftVersion: String by project
-val fabricLoaderVersion: String by project
+val minecraftVersion = libs.versions.minecraft.get()
 
 dependencies {
-    minecraft("com.mojang:minecraft:$minecraftVersion")
-    mappings("net.fabricmc:yarn:$minecraftVersion+build.+:v2")
+    minecraft(libs.minecraft)
+    mappings("net.fabricmc:yarn:$minecraftVersion+build.${libs.versions.yarn.get()}:v2")
+    modImplementation(libs.fabric.loader)
 
-    modImplementation("net.fabricmc:fabric-loader:$fabricLoaderVersion")
+//    modImplementation(libs.fabric.api)
+//    modImplementation(fabricApi.module("fabric-resource-loader-v0", libs.versions.fabric.api.get()))
 }
 
 tasks {
@@ -137,7 +138,7 @@ githubRelease {
 publishing {
     publications {
         create<MavenPublication>("mod") {
-            groupId = group.toString()
+            groupId = "dev.isxander"
             artifactId = base.archivesName.get()
 
             from(components["java"])
