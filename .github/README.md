@@ -30,4 +30,4 @@ Can be inserted here.
 
 ## License
 
-This mod is under the [GNU Lesser General Public License, v3.0](LICENSE).
+This mod is under the [GNU Lesser General Public License, v3.0](/LICENSE).
