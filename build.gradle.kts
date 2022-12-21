@@ -8,14 +8,44 @@ plugins {
     alias(libs.plugins.cursegradle)
     alias(libs.plugins.github.release)
     alias(libs.plugins.machete)
+    alias(libs.plugins.grgit)
     `maven-publish`
 }
 
 group = "dev.isxander"
-version = "1.0.0"
+version = "1.0.0+1.19.3"
+
+/* UNCOMMENT OR DELETE IF YOU WANT TESTMOD SOURCESET
+val testmod by sourceSets.registering {
+    compileClasspath += sourceSets.main.get().compileClasspath
+    runtimeClasspath += sourceSets.main.get().runtimeClasspath
+}
+
+loom {
+    runs {
+        register("testmod") {
+            client()
+            ideConfigGenerated(true)
+            name("Test Mod")
+            source(testmod.get())
+        }
+    }
+
+    createRemapConfigurations(testmod.get())
+}
+*/
 
 repositories {
     mavenCentral()
+    maven("https://maven.terraformersmc.com")
+    maven("https://maven.isxander.dev/releases")
+
+    maven("https://api.modrinth.com/maven") {
+        name = "Modrinth"
+        content {
+            includeGroup("maven.modrinth")
+        }
+    }
 }
 
 val minecraftVersion = libs.versions.minecraft.get()
@@ -27,6 +57,8 @@ dependencies {
 
 //    modImplementation(libs.fabric.api)
 //    modImplementation(fabricApi.module("fabric-resource-loader-v0", libs.versions.fabric.api.get()))
+
+    modRuntimeOnly("maven.modrinth:smoothboot-fabric:1.19-1.7.1") // improve system performance when booting dev env
 }
 
 tasks {
@@ -88,7 +120,7 @@ if (modrinthId.isNotEmpty()) {
         versionNumber.set("${project.version}")
         versionType.set("release")
         uploadFile.set(tasks["remapJar"])
-        gameVersions.set(listOf("1.19", "1.19.1", "1.19.2"))
+        gameVersions.set(listOf("1.19.3"))
         loaders.set(listOf("fabric", "quilt"))
         changelog.set(changelogText)
         syncBodyFrom.set(file("README.md").readText())
@@ -106,9 +138,7 @@ if (hasProperty("curseforge.token") && curseforgeId.isNotEmpty()) {
 
             id = curseforgeId
             releaseType = "release"
-            addGameVersion("1.19")
-            addGameVersion("1.19.1")
-            addGameVersion("1.19.2")
+            addGameVersion("1.19.3")
             addGameVersion("Fabric")
             addGameVersion("Java 17")
 
@@ -130,7 +160,7 @@ githubRelease {
     owner(split[0])
     repo(split[1])
     tagName("${project.version}")
-    targetCommitish("1.19")
+    targetCommitish("1.19.x/dev")
     body(changelogText)
     releaseAssets(tasks["remapJar"].outputs.files)
 }
@@ -146,15 +176,18 @@ publishing {
     }
 
     repositories {
-        if (hasProperty("xander-repo.username") && hasProperty("xander-repo.password")) {
+        val username = "XANDER_MAVEN_USER".let { System.getenv(it) ?: findProperty(it) }?.toString()
+        val password = "XANDER_MAVEN_PASS".let { System.getenv(it) ?: findProperty(it) }?.toString()
+        if (username != null && password != null) {
             maven(url = "https://maven.isxander.dev/releases") {
+                name = "Xander Releases"
                 credentials {
-                    username = property("xander-repo.username")?.toString()
-                    password = property("xander-repo.password")?.toString()
+                    this.username = username
+                    this.password = password
                 }
             }
         } else {
-            println("Xander Maven credentials not satisfied.")   
+            println("Xander Maven credentials not satisfied.")
         }
     }
 }
