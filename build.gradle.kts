@@ -67,13 +67,17 @@ dependencies {
 //        modImplementation(fabricApi.module(it, libs.versions.fabric.api.get()))   
 //    }
 
-//    modImplementation(libs.yet.another.config.lib)
+    modImplementation(libs.mod.menu)
+    modImplementation(libs.yet.another.config.lib)
+    
     libs.mixin.extras.let {
         implementation(it)
         annotationProcessor(it)
         include(it)
         // "clientAnnotationProcessor"(it) // DO NOT FORGET THIS IF SPLIT SOURCEES
     }
+    
+    
 }
 
 tasks {
