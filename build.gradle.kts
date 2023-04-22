@@ -13,7 +13,7 @@ plugins {
 }
 
 group = "dev.isxander"
-version = "1.0.0+1.19.3"
+version = "1.0.0+1.19.4"
 
 /* UNCOMMENT OR DELETE IF YOU WANT TESTMOD SOURCESET
 val testmod by sourceSets.registering {
@@ -39,6 +39,8 @@ repositories {
     mavenCentral()
     maven("https://maven.terraformersmc.com")
     maven("https://maven.isxander.dev/releases")
+    maven("https://maven.quiltmc.org/repository/release")
+    maven("https://jitpack.io")
 
     maven("https://api.modrinth.com/maven") {
         name = "Modrinth"
@@ -52,13 +54,26 @@ val minecraftVersion = libs.versions.minecraft.get()
 
 dependencies {
     minecraft(libs.minecraft)
-    mappings("net.fabricmc:yarn:$minecraftVersion+build.${libs.versions.yarn.get()}:v2")
+    mappings(loom.layered {
+        mappings("org.quiltmc:quilt-mappings:$minecraftVersion+build.${libs.versions.quilt.mappings.get()}:intermediary-v2")
+        officialMojangMappings()
+    })
     modImplementation(libs.fabric.loader)
 
 //    modImplementation(libs.fabric.api)
-//    modImplementation(fabricApi.module("fabric-resource-loader-v0", libs.versions.fabric.api.get()))
+//    listOf(
+//        "fabric-resource-loader-v0,
+//    ).forEach {
+//        modImplementation(fabricApi.module(it, libs.versions.fabric.api.get()))   
+//    }
 
-    modRuntimeOnly("maven.modrinth:smoothboot-fabric:1.19-1.7.1") // improve system performance when booting dev env
+//    modImplementation(libs.yet.another.config.lib)
+    libs.mixin.extras.let {
+        implementation(it)
+        annotationProcessor(it)
+        include(it)
+        // "clientAnnotationProcessor"(it) // DO NOT FORGET THIS IF SPLIT SOURCEES
+    }
 }
 
 tasks {
@@ -106,6 +121,10 @@ tasks {
     }
 }
 
+machete {
+    json.enabled.set(false)   
+}
+
 java {
     withSourcesJar()   
 }
@@ -120,7 +139,7 @@ if (modrinthId.isNotEmpty()) {
         versionNumber.set("${project.version}")
         versionType.set("release")
         uploadFile.set(tasks["remapJar"])
-        gameVersions.set(listOf("1.19.3"))
+        gameVersions.set(listOf("1.19.4"))
         loaders.set(listOf("fabric", "quilt"))
         changelog.set(changelogText)
         syncBodyFrom.set(file("README.md").readText())
@@ -138,7 +157,7 @@ if (hasProperty("curseforge.token") && curseforgeId.isNotEmpty()) {
 
             id = curseforgeId
             releaseType = "release"
-            addGameVersion("1.19.3")
+            addGameVersion("1.19.4")
             addGameVersion("Fabric")
             addGameVersion("Java 17")
 
@@ -169,9 +188,11 @@ publishing {
     publications {
         create<MavenPublication>("mod") {
             groupId = "dev.isxander"
-            artifactId = base.archivesName.get()
+            val modId: String by project
+            artifactId = modId
 
             from(components["java"])
+            artifact(tasks["remapSourcesJar"])
         }
     }
 
@@ -180,7 +201,7 @@ publishing {
         val password = "XANDER_MAVEN_PASS".let { System.getenv(it) ?: findProperty(it) }?.toString()
         if (username != null && password != null) {
             maven(url = "https://maven.isxander.dev/releases") {
-                name = "Xander Releases"
+                name = "XanderReleases"
                 credentials {
                     this.username = username
                     this.password = password
@@ -190,4 +211,10 @@ publishing {
             println("Xander Maven credentials not satisfied.")
         }
     }
+}
+tasks.getByName("generateMetadataFileForModPublication") {
+    dependsOn("optimizeOutputsOfRemapJar")
+}
+tasks.getByName("publishModPublicationToXanderReleasesRepository") {
+    dependsOn("optimizeOutputsOfRemapJar")
 }
