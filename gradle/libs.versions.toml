@@ -1,22 +1,27 @@
 [versions]
 loom = "1.1.+"
 loom_quiltflower = "1.8.+"
-minotaur = "2.5.+"
-cursegradle = "6.+"
+minotaur = "2.7.+"
+cursegradle = "2.+"
 github_release = "2.+"
-machete = "1.+"
-grgit = "5.0.+"
+machete = "2.+"
+grgit = "5.2.+"
 
 minecraft = "1.19.4"
-yarn = "1"
-fabric_loader = "0.14.17"
-fabric_api = "0.76.0+1.19.4"
+quilt_mappings = "10"
+fabric_loader = "0.14.19"
+fabric_api = "0.78.0+1.19.4"
+mixin_extras = "0.2.0-beta.6"
+yet_another_config_lib = "2.4.2"
+mod_menu = "6.2.1"
 
 [libraries]
 minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
 fabric_loader = { module = "net.fabricmc:fabric-loader", version.ref = "fabric_loader" }
-
 fabric_api = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric_api" }
+mixin_extras = { module = "com.github.llamalad7.mixinextras:mixinextras-fabric", version.ref = "mixin_extras" }
+yet_another_config_lib = { module = "dev.isxander:yet-another-config-lib", version.ref = "yet_another_config_lib" }
+mod_menu = { module = "com.terraformersmc:modmenu", version.ref = "mod_menu" }
 
 [plugins]
 loom = { id = "fabric-loom", version.ref = "loom" }
