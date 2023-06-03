@@ -1,6 +1,6 @@
 [versions]
-loom = "1.1.+"
-loom_quiltflower = "1.8.+"
+loom = "1.2.+"
+loom_quiltflower = "1.10.+"
 minotaur = "2.7.+"
 cursegradle = "2.+"
 github_release = "2.+"
@@ -9,9 +9,9 @@ grgit = "5.2.+"
 
 minecraft = "1.19.4"
 quilt_mappings = "10"
-fabric_loader = "0.14.19"
-fabric_api = "0.78.0+1.19.4"
-mixin_extras = "0.2.0-beta.6"
+fabric_loader = "0.14.21"
+fabric_api = "0.83.0+1.19.4"
+mixin_extras = "0.2.0-beta.8"
 yet_another_config_lib = "2.4.2"
 mod_menu = "6.2.1"
 
