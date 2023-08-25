@@ -13,7 +13,7 @@ plugins {
 }
 
 group = "dev.isxander"
-version = "1.0.0+1.19.4"
+version = "1.0.0+1.20.1"
 
 /* UNCOMMENT OR DELETE IF YOU WANT TESTMOD SOURCESET
 val testmod by sourceSets.registering {
@@ -41,6 +41,7 @@ repositories {
     maven("https://maven.isxander.dev/releases")
     maven("https://maven.quiltmc.org/repository/release")
     maven("https://jitpack.io")
+    maven("https://oss.sonatype.org/content/repositories/snapshots")
 
     maven("https://api.modrinth.com/maven") {
         name = "Modrinth"
@@ -76,8 +77,6 @@ dependencies {
         include(it)
         // "clientAnnotationProcessor"(it) // DO NOT FORGET THIS IF SPLIT SOURCEES
     }
-    
-    
 }
 
 tasks {
@@ -143,7 +142,7 @@ if (modrinthId.isNotEmpty()) {
         versionNumber.set("${project.version}")
         versionType.set("release")
         uploadFile.set(tasks["remapJar"])
-        gameVersions.set(listOf("1.19.4"))
+        gameVersions.set(listOf("1.20.1"))
         loaders.set(listOf("fabric", "quilt"))
         changelog.set(changelogText)
         syncBodyFrom.set(file("README.md").readText())
@@ -161,7 +160,7 @@ if (hasProperty("curseforge.token") && curseforgeId.isNotEmpty()) {
 
             id = curseforgeId
             releaseType = "release"
-            addGameVersion("1.19.4")
+            addGameVersion("1.20.1")
             addGameVersion("Fabric")
             addGameVersion("Java 17")
 
@@ -183,7 +182,7 @@ githubRelease {
     owner(split[0])
     repo(split[1])
     tagName("${project.version}")
-    targetCommitish("1.19.x/dev")
+    targetCommitish("1.20.x/dev")
     body(changelogText)
     releaseAssets(tasks["remapJar"].outputs.files)
 }
