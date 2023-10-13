@@ -7,13 +7,13 @@ github_release = "2.+"
 machete = "2.+"
 grgit = "5.2.+"
 
-minecraft = "1.20.1"
-quilt_mappings = "23"
-fabric_loader = "0.14.22"
-fabric_api = "0.87.0+1.20.1"
-mixin_extras = "0.2.0-beta.10"
-yet_another_config_lib = "3.1.0+1.20"
-mod_menu = "7.1.0"
+minecraft = "1.20.2"
+quilt_mappings = "3"
+fabric_loader = "0.14.23"
+fabric_api = "0.90.0+1.20.2"
+mixin_extras = "0.2.0-rc.5"
+yet_another_config_lib = "3.2.0+1.20.2"
+mod_menu = "8.0.0"
 
 [libraries]
 minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
