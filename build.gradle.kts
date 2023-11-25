@@ -2,7 +2,6 @@ plugins {
     java
 
     alias(libs.plugins.loom)
-    alias(libs.plugins.loom.vineflower)
 
     alias(libs.plugins.minotaur)
     alias(libs.plugins.cursegradle)
@@ -13,7 +12,7 @@ plugins {
 }
 
 group = "dev.isxander"
-version = "1.0.0+1.20.1"
+version = "1.0.0+1.20.2"
 
 /* UNCOMMENT OR DELETE IF YOU WANT TESTMOD SOURCESET
 val testmod by sourceSets.registering {
